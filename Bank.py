@@ -1,0 +1,44 @@
+def deposit(balance, amount):
+    if amount <= 0:
+        print("Сумма пополнения должна быть больше нуля")
+        return balance
+    return balance +  amount
+
+def withdraw(balance, amount):
+    if amount <= 0:
+        print("Сумма снятия должна быть больше нуля")
+        return balance
+    if balance < amount:
+        print("Недостаточно средств.")
+        return balance
+    return balance - amount
+
+def show_balance(balance):
+    print("На вашем счёту:", balance)
+
+balance = 1000
+show_balance(balance)
+
+while True:
+    print("1 - Пополнить \n2 - Снять \n3 - Посмотреть баланс \n4 - Выход")
+    choice = input("Выберите действие: ")
+    
+    if choice == "1":
+        amount = float(input("Введите сумму для пополнения: "))
+        balance = deposit(balance, amount)
+        show_balance(balance)
+
+    elif choice == "2":
+        amount = float(input("Введите сумму для снятия: "))
+        balance = withdraw(balance, amount)
+        show_balance(balance)
+
+    elif choice == "3":
+        show_balance(balance)
+
+    elif choice == "4":
+        print("До свидания!")
+        break
+
+    else:
+        print("Неизвестная команда. Пожалуйста, выберите от 1 до 4.")
