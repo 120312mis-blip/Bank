@@ -1,3 +1,7 @@
+import os
+base_dir = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(base_dir, "data", "balance.txt")
+
 def deposit(balance, amount):
     if amount <= 0:
         print("Сумма пополнения должна быть больше нуля")
@@ -16,7 +20,18 @@ def withdraw(balance, amount):
 def show_balance(balance):
     print("На вашем счёту:", balance)
 
-balance = 1000
+def load_balance():
+    try:
+        with open(file_path, "r") as f:
+            return float(f.read())
+    except FileNotFoundError:
+        return 1000.0
+
+def save_balance(balance):
+        with open(file_path, "w") as f:
+            f.write(str(balance))
+
+balance = load_balance()
 show_balance(balance)
 
 while True:
@@ -28,6 +43,7 @@ while True:
             amount = float(input("Введите сумму для пополнения: "))
             balance = deposit(balance, amount)
             show_balance(balance)
+            save_balance(balance)
         except ValueError:
             print("Ошибка! Введите число.")
             continue
@@ -37,6 +53,7 @@ while True:
             amount = float(input("Введите сумму для снятия: "))
             balance = withdraw(balance, amount)
             show_balance(balance)
+            save_balance(balance)
         except ValueError:
             print("Ошибка! Введите число.")
             continue
