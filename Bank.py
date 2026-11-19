@@ -24,14 +24,22 @@ while True:
     choice = input("Выберите действие: ")
     
     if choice == "1":
-        amount = float(input("Введите сумму для пополнения: "))
-        balance = deposit(balance, amount)
-        show_balance(balance)
+        try:
+            amount = float(input("Введите сумму для пополнения: "))
+            balance = deposit(balance, amount)
+            show_balance(balance)
+        except ValueError:
+            print("Ошибка! Введите число.")
+            continue
 
     elif choice == "2":
-        amount = float(input("Введите сумму для снятия: "))
-        balance = withdraw(balance, amount)
-        show_balance(balance)
+        try:
+            amount = float(input("Введите сумму для снятия: "))
+            balance = withdraw(balance, amount)
+            show_balance(balance)
+        except ValueError:
+            print("Ошибка! Введите число.")
+            continue
 
     elif choice == "3":
         show_balance(balance)
