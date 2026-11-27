@@ -18,7 +18,7 @@ The application simulates basic bank account operations and automatically saves 
 
 1. Clone the repository to your local machine:
 ```bash
-git clone https://github.com
+git clone https://github.com/Monson-MIS/Bank.git
 ```
 
 2. Navigate to the project directory:
@@ -30,6 +30,7 @@ cd Bank
 ```bash
 python Bank.py
 ```
+*(Note: On macOS or Linux, you may need to use `python3 Bank.py`)*
 
 ## 📂 Project Structure
 ```text
