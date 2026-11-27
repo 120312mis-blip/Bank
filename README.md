@@ -26,9 +26,9 @@ git clone https://github.com
 cd Bank
 ```
 
-3. Run the main script (replace `main.py` with your actual script filename if different):
+3. Run the main script:
 ```bash
-python main.py
+python Bank.py
 ```
 
 ## 📂 Project Structure
@@ -37,7 +37,7 @@ Bank/
 ├── data/               # Created automatically on the first run
 │   ├── balance.txt     # Current user balance
 │   └── history.txt     # Log of all transactions
-├── main.py             # Main application source code
+├── Bank.py             # Main application source code
 └── README.md           # Project documentation
 ```
 
