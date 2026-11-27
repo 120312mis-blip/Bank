@@ -4,18 +4,20 @@ file_path = os.path.join(base_dir, "data", "balance.txt")
 history_path = os.path.join(base_dir, "data", "history.txt")
 
 class BankAccount:
-    def __init__(self, balance = 1000):
-        self.balance = balance
+    def __init__(self, file_path, history_path):
+        self.file_path = file_path
+        self.history_path = history_path
+        self.balance = self.load_balance()
 
     def deposit(self, amount):
         if amount <= 0:
             print("Сумма пополнения должна быть больше нуля")
             return
         self.balance += amount
-        add_to_history(f"Пополнение: + {amount}")
+        self.add_to_history(f"Пополнение: + {amount}")
         self.show_balance()
-        save_balance(self.balance)
-
+        self.save_balance() 
+    
     def withdraw(self, amount):
         if amount <= 0:
             print("Сумма снятия должна быть больше нуля")
@@ -24,38 +26,37 @@ class BankAccount:
             print("Недостаточно средств.")
             return
         self.balance -= amount
-        add_to_history(f"Снятие: - {amount}")
+        self.add_to_history(f"Снятие: - {amount}")
         self.show_balance()
-        save_balance(self.balance)
+        self.save_balance() 
 
     def show_balance(self):
-            print(f"Текущий баланс: {self.balance}")
+        print(f"Текущий баланс: {self.balance}")
+    
+    def load_balance(self):
+        try:
+            with open(self.file_path, "r") as f:
+                return float(f.read())
+        except FileNotFoundError:
+            return 1000.0
 
+    def save_balance(self):
+        with open(self.file_path, "w") as f:
+            f.write(str(self.balance))
+    
+    def add_to_history(self, operation_text):
+        with open(self.history_path, "a", encoding="utf-8") as f:
+            f.write(operation_text + "\n")
 
-def load_balance():
-    try:
-        with open(file_path, "r") as f:
-            return float(f.read())
-    except FileNotFoundError:
-        return 1000.0
-
-def save_balance(balance):
-        with open(file_path, "w") as f:
-            f.write(str(balance))
-
-def add_to_history(operation_text):
-    with open(history_path, "a", encoding="utf-8") as f:
-        f.write(operation_text + "\n")
-
-def show_history():
-    try:
-        with open(history_path, "r", encoding="utf-8") as f:
-            print("\n--- История операций ---")
-            print(f.read())
-    except FileNotFoundError:
-        print("\nИстория операций пока пуста.")
-
-account = BankAccount(load_balance())
+    def show_history(self):
+        try:
+            with open(self.history_path, "r", encoding="utf-8") as f:
+                print("\n--- История операций ---")
+                print(f.read())
+        except FileNotFoundError:
+            print("\nИстория операций пока пуста.")
+    
+account = BankAccount(file_path, history_path)
 account.show_balance()
 
 while True:
@@ -86,7 +87,7 @@ while True:
         break
 
     elif choice == "5":
-        show_history()
+        account.show_history()
 
     else:
         print("Неизвестная команда. Пожалуйста, выберите от 1 до 5.")
