@@ -7,6 +7,7 @@ class BankAccount:
     def __init__(self, file_path, history_path):
         self.file_path = file_path
         self.history_path = history_path
+        os.makedirs(os.path.dirname(self.file_path), exist_ok=True)
         self.balance = self.load_balance()
 
     def deposit(self, amount):
