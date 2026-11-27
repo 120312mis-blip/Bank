@@ -11,37 +11,34 @@ class BankAccount:
 
     def deposit(self, amount):
         if amount <= 0:
-            print("Сумма пополнения должна быть больше нуля")
-            return
+            return False, ("Сумма пополнения должна быть больше нуля")
         self.balance += amount
         self.add_to_history(f"Пополнение: + {amount}")
-        self.show_balance()
-        self.save_balance() 
+        self.save_balance()
+        return True, f"Пополнение успешно. Текущий баланс: {self.balance}"
     
     def withdraw(self, amount):
         if amount <= 0:
-            print("Сумма снятия должна быть больше нуля")
-            return
+            return False, "Сумма снятия должна быть больше нуля"
         if self.balance < amount:
-            print("Недостаточно средств.")
-            return
+            return False, "Недостаточно средств."
         self.balance -= amount
         self.add_to_history(f"Снятие: - {amount}")
-        self.show_balance()
-        self.save_balance() 
+        self.save_balance()
+        return True, f"Снятие успешно. Текущий баланс: {self.balance}"
 
     def show_balance(self):
-        print(f"Текущий баланс: {self.balance}")
+        return f"Текущий баланс: {self.balance}"
     
     def load_balance(self):
         try:
-            with open(self.file_path, "r") as f:
+            with open(self.file_path, "r", encoding="utf-8") as f:
                 return float(f.read())
         except FileNotFoundError:
             return 1000.0
 
     def save_balance(self):
-        with open(self.file_path, "w") as f:
+        with open(self.file_path, "w", encoding="utf-8") as f:
             f.write(str(self.balance))
     
     def add_to_history(self, operation_text):
@@ -51,13 +48,12 @@ class BankAccount:
     def show_history(self):
         try:
             with open(self.history_path, "r", encoding="utf-8") as f:
-                print("\n--- История операций ---")
-                print(f.read())
+                return f.read()
         except FileNotFoundError:
-            print("\nИстория операций пока пуста.")
+            return "\nИстория операций пока пуста."
     
 account = BankAccount(file_path, history_path)
-account.show_balance()
+print(account.show_balance())
 
 while True:
     print("1 - Пополнить \n2 - Снять \n3 - Посмотреть баланс \n4 - Выход \n5 - История операций")
@@ -66,7 +62,8 @@ while True:
     if choice == "1":
         try:
             amount = float(input("Введите сумму для пополнения: "))
-            account.deposit(amount)
+            success, message = account.deposit(amount)
+            print(message)
         except ValueError:
             print("Ошибка! Введите число.")
             continue
@@ -74,20 +71,21 @@ while True:
     elif choice == "2":
         try:
             amount = float(input("Введите сумму для снятия: "))
-            account.withdraw(amount)
+            success, message = account.withdraw(amount)
+            print(message)
         except ValueError:
             print("Ошибка! Введите число.")
             continue
 
     elif choice == "3":
-        account.show_balance()
+        print(account.show_balance())
 
     elif choice == "4":
         print("До свидания!")
         break
 
     elif choice == "5":
-        account.show_history()
+        print(account.show_history())
 
     else:
         print("Неизвестная команда. Пожалуйста, выберите от 1 до 5.")
